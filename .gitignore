@@ -1,0 +1,28 @@
+# Roblox Studio
+*.rbxl
+*.rbxlx
+*.rbxm
+*.rbxmx
+*.rbxl.lock
+
+# Rojo
+*.rbxmx.lock
+sourcemap.json
+
+# Lua / Luau tooling
+.luau-analyze-cache/
+.selene-cache/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Temporary files
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
