@@ -1,0 +1,171 @@
+name: Binance COIN-M public-data transport 2026-08-15
+
+on:
+  push:
+    branches:
+      - agent/binance-coinm-transport-20260815
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  transport:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pinned transport dependency
+        run: python -m pip install requests==2.32.5
+
+      - name: Download and verify official BTCUSD_PERP monthly klines
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p transport
+          cat > transport/acquire_coinm.py <<'PY'
+          from __future__ import annotations
+
+          import concurrent.futures
+          import hashlib
+          import json
+          import os
+          import tempfile
+          import time
+          import zipfile
+          from pathlib import Path
+
+          import requests
+
+          BASE = "https://data.binance.vision/data/futures/cm/monthly/klines/BTCUSD_PERP/1h"
+          ROOT = Path("transport/workspace")
+
+          def months(start: str, end: str) -> list[str]:
+              sy, sm = map(int, start.split("-"))
+              ey, em = map(int, end.split("-"))
+              out = []
+              y, m = sy, sm
+              while (y, m) <= (ey, em):
+                  out.append(f"{y:04d}-{m:02d}")
+                  m += 1
+                  if m == 13:
+                      y += 1
+                      m = 1
+              return out
+
+          def get(url: str) -> bytes:
+              last = None
+              for attempt in range(6):
+                  try:
+                      response = requests.get(url, timeout=120)
+                      response.raise_for_status()
+                      return response.content
+                  except Exception as exc:
+                      last = exc
+                      if attempt == 5:
+                          break
+                      time.sleep(1.5 * (2 ** attempt))
+              raise RuntimeError(f"download failed: {url}: {last}")
+
+          def atomic(path: Path, data: bytes) -> None:
+              path.parent.mkdir(parents=True, exist_ok=True)
+              fd, tmp = tempfile.mkstemp(prefix=path.name + ".", dir=path.parent)
+              try:
+                  with os.fdopen(fd, "wb") as f:
+                      f.write(data)
+                      f.flush()
+                      os.fsync(f.fileno())
+                  os.replace(tmp, path)
+              finally:
+                  if os.path.exists(tmp):
+                      os.unlink(tmp)
+
+          def acquire(month: str) -> dict[str, object]:
+              filename = f"BTCUSD_PERP-1h-{month}.zip"
+              url = f"{BASE}/{filename}"
+              path = ROOT / "raw" / "coinm" / filename
+              sidecar = get(url + ".CHECKSUM")
+              parts = sidecar.decode("utf-8", "strict").strip().split()
+              if not parts or len(parts[0]) != 64:
+                  raise RuntimeError(f"invalid sidecar: {url}")
+              expected = parts[0].lower()
+              if len(parts) >= 2 and Path(parts[-1].lstrip("*")).name != filename:
+                  raise RuntimeError(f"sidecar filename mismatch: {url}")
+              payload = get(url)
+              actual = hashlib.sha256(payload).hexdigest()
+              if actual != expected:
+                  raise RuntimeError(f"sha256 mismatch: {url}")
+              atomic(path, payload)
+              atomic(Path(str(path) + ".CHECKSUM"), sidecar)
+              with zipfile.ZipFile(path) as zf:
+                  names = [name for name in zf.namelist() if not name.endswith("/")]
+                  if len(names) != 1:
+                      raise RuntimeError(f"unexpected ZIP members: {path}: {names}")
+                  bad = zf.testzip()
+                  if bad is not None:
+                      raise RuntimeError(f"corrupt ZIP member: {path}: {bad}")
+              return {
+                  "dataset": "coinm_klines",
+                  "month": month,
+                  "url": url,
+                  "path": str(path.relative_to(ROOT)),
+                  "bytes": len(payload),
+                  "sha256": actual,
+              }
+
+          rows = []
+          with concurrent.futures.ThreadPoolExecutor(max_workers=12) as pool:
+              futures = {pool.submit(acquire, month): month for month in months("2020-09", "2026-06")}
+              for future in concurrent.futures.as_completed(futures):
+                  row = future.result()
+                  rows.append(row)
+                  print(f"OK {row['month']} {str(row['sha256'])[:12]}", flush=True)
+          rows.sort(key=lambda row: str(row["month"]))
+          canonical = json.dumps(rows, sort_keys=True, separators=(",", ":")).encode()
+          manifest = {
+              "source": "official Binance Vision COIN-M monthly ZIP plus CHECKSUM",
+              "symbol": "BTCUSD_PERP",
+              "interval": "1h",
+              "start_month": "2020-09",
+              "end_month": "2026-06",
+              "objects": len(rows),
+              "manifest_identity_sha256": hashlib.sha256(canonical).hexdigest(),
+              "entries": rows,
+          }
+          (ROOT / "coinm_transport_manifest.json").write_text(
+              json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+          )
+          print(json.dumps({key: manifest[key] for key in manifest if key != "entries"}, indent=2))
+          PY
+          python transport/acquire_coinm.py 2>&1 | tee transport/acquire_coinm.log
+
+      - name: Build deterministic transport bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp transport/acquire_coinm.log transport/workspace/
+          (
+            cd transport/workspace
+            find . -type f ! -name TRANSPORT_SHA256SUMS.txt -print0 | sort -z | xargs -0 sha256sum \
+              > TRANSPORT_SHA256SUMS.txt
+          )
+          tar --sort=name --mtime='UTC 2026-08-15' --owner=0 --group=0 --numeric-owner \
+            -czf transport/BINANCE_BTCUSD_PERP_COINM_1H_2020_09_2026_06.tar.gz \
+            -C transport/workspace .
+          sha256sum transport/BINANCE_BTCUSD_PERP_COINM_1H_2020_09_2026_06.tar.gz \
+            > transport/BINANCE_BTCUSD_PERP_COINM_1H_2020_09_2026_06.tar.gz.sha256
+
+      - name: Upload verified COIN-M transport artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: BINANCE_BTCUSD_PERP_COINM_1H_2020_09_2026_06
+          path: |
+            transport/BINANCE_BTCUSD_PERP_COINM_1H_2020_09_2026_06.tar.gz
+            transport/BINANCE_BTCUSD_PERP_COINM_1H_2020_09_2026_06.tar.gz.sha256
+          if-no-files-found: error
+          retention-days: 7
