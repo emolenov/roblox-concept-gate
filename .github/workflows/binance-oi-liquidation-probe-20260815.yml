@@ -1,0 +1,65 @@
+name: Binance OI and liquidation archive probe 2026-08-15
+
+on:
+  push:
+    branches:
+      - agent/binance-oi-liquidation-transport-20260815
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Probe official daily archives and sidecars
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          import urllib.error
+          import urllib.request
+          from pathlib import Path
+
+          base = "https://data.binance.vision/data/futures"
+          dates = ["2021-01-01", "2023-03-12", "2024-01-01", "2025-01-01", "2026-07-01", "2026-07-31"]
+          specs = [
+              ("um", "metrics", "BTCUSDT"),
+              ("um", "liquidationSnapshot", "BTCUSDT"),
+              ("cm", "metrics", "BTCUSD_PERP"),
+              ("cm", "liquidationSnapshot", "BTCUSD_PERP"),
+          ]
+          rows = []
+          for market, dataset, symbol in specs:
+              for day in dates:
+                  filename = f"{symbol}-{dataset}-{day}.zip"
+                  url = f"{base}/{market}/daily/{dataset}/{symbol}/{filename}"
+                  row = {"market": market, "dataset": dataset, "symbol": symbol, "date": day, "url": url}
+                  for suffix in ("", ".CHECKSUM"):
+                      key = "zip" if not suffix else "checksum"
+                      try:
+                          req = urllib.request.Request(url + suffix, headers={"User-Agent": "archive-probe/1"})
+                          with urllib.request.urlopen(req, timeout=30) as response:
+                              body = response.read()
+                              row[key] = {"status": response.status, "bytes": len(body), "content_type": response.headers.get("Content-Type")}
+                      except urllib.error.HTTPError as exc:
+                          row[key] = {"status": exc.code, "bytes": 0}
+                      except Exception as exc:
+                          row[key] = {"status": "ERROR", "error": repr(exc)}
+                  rows.append(row)
+                  print(json.dumps(row, sort_keys=True), flush=True)
+          Path("probe.json").write_text(json.dumps(rows, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: BINANCE_OI_LIQUIDATION_ARCHIVE_PROBE
+          path: probe.json
+          if-no-files-found: error
+          retention-days: 7
