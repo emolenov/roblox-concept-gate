@@ -1,0 +1,172 @@
+name: Binance BTCUSDT metrics and July holdout transport 2026-08-15
+
+on:
+  push:
+    branches:
+      - agent/binance-oi-liquidation-transport-20260815
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  transport:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependency
+        run: python -m pip install requests==2.32.5
+      - name: Download and verify official daily metrics plus July monthly holdout
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p transport
+          cat > transport/acquire.py <<'PY'
+          from __future__ import annotations
+          import concurrent.futures
+          import datetime as dt
+          import hashlib
+          import json
+          import os
+          import tempfile
+          import time
+          import zipfile
+          from pathlib import Path
+          import requests
+
+          BASE = "https://data.binance.vision/data"
+          ROOT = Path("transport/workspace")
+
+          def dates(start: str, end: str):
+              cur = dt.date.fromisoformat(start)
+              stop = dt.date.fromisoformat(end)
+              while cur <= stop:
+                  yield cur.isoformat()
+                  cur += dt.timedelta(days=1)
+
+          def plan():
+              out = []
+              for day in dates("2021-01-01", "2026-07-31"):
+                  name = f"BTCUSDT-metrics-{day}.zip"
+                  out.append({
+                      "dataset": "um_metrics",
+                      "date": day,
+                      "url": f"{BASE}/futures/um/daily/metrics/BTCUSDT/{name}",
+                      "path": str(ROOT / "raw" / "metrics" / name),
+                      "required": True,
+                  })
+              ym = "2026-07"
+              monthly = [
+                  ("spot_klines", f"{BASE}/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-{ym}.zip", ROOT / "raw" / "july" / "spot" / f"BTCUSDT-1h-{ym}.zip"),
+                  ("usdtm_klines", f"{BASE}/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-{ym}.zip", ROOT / "raw" / "july" / "perp" / f"BTCUSDT-1h-{ym}.zip"),
+                  ("funding", f"{BASE}/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-{ym}.zip", ROOT / "raw" / "july" / "funding" / f"BTCUSDT-fundingRate-{ym}.zip"),
+                  ("coinm_klines", f"{BASE}/futures/cm/monthly/klines/BTCUSD_PERP/1h/BTCUSD_PERP-1h-{ym}.zip", ROOT / "raw" / "july" / "coinm" / f"BTCUSD_PERP-1h-{ym}.zip"),
+              ]
+              for dataset, url, path in monthly:
+                  out.append({"dataset": dataset, "date": ym, "url": url, "path": str(path), "required": True})
+              return out
+
+          session = requests.Session()
+          adapter = requests.adapters.HTTPAdapter(pool_connections=32, pool_maxsize=32, max_retries=0)
+          session.mount("https://", adapter)
+
+          def get(url: str):
+              last = None
+              for attempt in range(6):
+                  try:
+                      response = session.get(url, timeout=90)
+                      if response.status_code == 404:
+                          return None
+                      response.raise_for_status()
+                      return response.content
+                  except Exception as exc:
+                      last = exc
+                      if attempt == 5:
+                          break
+                      time.sleep(1.0 * (2 ** attempt))
+              raise RuntimeError(f"download failed {url}: {last}")
+
+          def atomic(path: Path, data: bytes):
+              path.parent.mkdir(parents=True, exist_ok=True)
+              fd, tmp = tempfile.mkstemp(prefix=path.name + ".", dir=path.parent)
+              try:
+                  with os.fdopen(fd, "wb") as f:
+                      f.write(data); f.flush(); os.fsync(f.fileno())
+                  os.replace(tmp, path)
+              finally:
+                  if os.path.exists(tmp): os.unlink(tmp)
+
+          def acquire(item):
+              path = Path(item["path"])
+              sidecar = get(item["url"] + ".CHECKSUM")
+              payload = get(item["url"])
+              if sidecar is None or payload is None:
+                  if item["required"]:
+                      raise RuntimeError(f"required object unavailable: {item['url']}")
+                  return {**item, "status": "UNAVAILABLE"}
+              text = sidecar.decode("utf-8", "strict").strip()
+              parts = text.split()
+              expected = parts[0].lower() if parts else ""
+              if len(expected) != 64:
+                  raise RuntimeError(f"malformed sidecar: {item['url']}")
+              if len(parts) >= 2 and Path(parts[-1].lstrip("*")).name != path.name:
+                  raise RuntimeError(f"sidecar filename mismatch: {item['url']}")
+              actual = hashlib.sha256(payload).hexdigest()
+              if actual != expected:
+                  raise RuntimeError(f"checksum mismatch: {item['url']}")
+              atomic(path, payload)
+              atomic(Path(str(path) + ".CHECKSUM"), sidecar)
+              with zipfile.ZipFile(path) as zf:
+                  names = [n for n in zf.namelist() if not n.endswith("/")]
+                  if len(names) != 1:
+                      raise RuntimeError(f"unexpected members: {path}: {names}")
+                  bad = zf.testzip()
+                  if bad is not None:
+                      raise RuntimeError(f"bad ZIP member {path}: {bad}")
+              return {
+                  "dataset": item["dataset"], "date": item["date"],
+                  "url": item["url"], "path": str(path.relative_to(ROOT)),
+                  "status": "VERIFIED", "bytes": len(payload), "sha256": actual,
+              }
+
+          items = plan()
+          rows = []
+          with concurrent.futures.ThreadPoolExecutor(max_workers=24) as pool:
+              futures = {pool.submit(acquire, item): item for item in items}
+              for future in concurrent.futures.as_completed(futures):
+                  row = future.result(); rows.append(row)
+                  print(f"{row['status']} {row['dataset']} {row['date']}", flush=True)
+          rows.sort(key=lambda r: (r["dataset"], r["date"]))
+          canonical = json.dumps(rows, sort_keys=True, separators=(",", ":")).encode()
+          manifest = {
+              "source": "official Binance Vision ZIP plus CHECKSUM",
+              "metrics_start": "2021-01-01",
+              "metrics_end": "2026-07-31",
+              "verified_objects": sum(r["status"] == "VERIFIED" for r in rows),
+              "manifest_identity_sha256": hashlib.sha256(canonical).hexdigest(),
+              "entries": rows,
+          }
+          (ROOT / "transport_manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n")
+          print(json.dumps({k:v for k,v in manifest.items() if k != "entries"}, indent=2))
+          PY
+          python transport/acquire.py 2>&1 | tee transport/acquire.log
+      - name: Build deterministic artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp transport/acquire.log transport/workspace/
+          find transport/workspace -type f -print0 | sort -z | xargs -0 sha256sum > transport/workspace/TRANSPORT_SHA256SUMS.txt
+          tar --sort=name --mtime='UTC 2026-08-15' --owner=0 --group=0 --numeric-owner -czf transport/BINANCE_BTCUSDT_UM_METRICS_2021_01_01_2026_07_31_PLUS_JULY_HOLDOUT.tar.gz -C transport/workspace .
+          sha256sum transport/BINANCE_BTCUSDT_UM_METRICS_2021_01_01_2026_07_31_PLUS_JULY_HOLDOUT.tar.gz > transport/BINANCE_BTCUSDT_UM_METRICS_2021_01_01_2026_07_31_PLUS_JULY_HOLDOUT.tar.gz.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: BINANCE_BTCUSDT_UM_METRICS_2021_01_01_2026_07_31_PLUS_JULY_HOLDOUT
+          path: |
+            transport/BINANCE_BTCUSDT_UM_METRICS_2021_01_01_2026_07_31_PLUS_JULY_HOLDOUT.tar.gz
+            transport/BINANCE_BTCUSDT_UM_METRICS_2021_01_01_2026_07_31_PLUS_JULY_HOLDOUT.tar.gz.sha256
+          if-no-files-found: error
+          retention-days: 7
