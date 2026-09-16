@@ -412,7 +412,7 @@ local function teleportThroughPortal(player, sourceCFrame, destinationCFrame, is
 	local mappedVelocity = destinationCFrame:VectorToWorldSpace(localVelocity)
 
 	player:SetAttribute("InsideInteriorV2", isInside)
-	root.CFrame = CFrame.new(destinationCFrame.Position - (isInside and destinationCFrame.LookVector * 0.75 or Vector3.zero)) * destinationRotation
+	root.CFrame = CFrame.new(destinationCFrame.Position - (isInside and destinationCFrame.LookVector * 3.0 or Vector3.zero)) * destinationRotation
 	root.AssemblyLinearVelocity = Vector3.new(mappedVelocity.X, math.max(0, mappedVelocity.Y), mappedVelocity.Z)
 	root.AssemblyAngularVelocity = Vector3.zero
 	updateHoseLineForInterior(player, isInside)
