@@ -99,6 +99,9 @@ local function updateRescueGate()
 end
 
 local function currentObjective(player)
+	if gate:GetAttribute("MissionCompleted") == true then
+		return ""
+	end
 	if activeMission.Value == "Pet" then
 		if player:GetAttribute("CarryingPet") == true then
 			return "СПУСТИСЬ И ОТНЕСИ КОТЁНКА В БЕЗОПАСНУЮ ЗОНУ"
@@ -284,6 +287,18 @@ for _, node in ipairs(orderedNodes()) do
 end
 
 gate:GetAttributeChangedSignal("ExteriorFiresOut"):Connect(function()
+	publish()
+end)
+
+gate:GetAttributeChangedSignal("LadderState"):Connect(function()
+	publish()
+end)
+
+gate:GetAttributeChangedSignal("PetCarried"):Connect(function()
+	publish()
+end)
+
+gate:GetAttributeChangedSignal("MissionCompleted"):Connect(function()
 	publish()
 end)
 
