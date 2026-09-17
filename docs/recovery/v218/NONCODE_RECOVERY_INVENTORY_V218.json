@@ -1,0 +1,269 @@
+{
+  "capturedUtc": "2026-09-17T03:51:22Z",
+  "studio": {
+    "id": "0e0d724f-525d-4fbd-a983-9d5e36495c84",
+    "name": "Ворота слепых концепций  (placeId: 78904936179345)"
+  },
+  "studioState": "- Current Studio Mode: Edit\n- Available DataModels: Edit\n- Focused DataModel in the viewport: Edit",
+  "identity": {
+    "placeVersion": 218,
+    "placeId": 78904936179345,
+    "root": true,
+    "missionType": "Random"
+  },
+  "terrain": {
+    "WaterTransparency": "0.30000001192092896",
+    "maxExtents": "-32000, -32000, -32000; 32000, 32000, 32000",
+    "WaterReflectance": "1",
+    "WaterColor": [
+      0.0470588281750679,
+      0.3294117748737335,
+      0.3607843220233917
+    ],
+    "voxelPayloadExported": false,
+    "WaterWaveSize": "0.15000000596046448",
+    "WaterWaveSpeed": "10"
+  },
+  "classCounts": {
+    "Workspace": {
+      "classes": {
+        "Humanoid": 1,
+        "Part": 3313,
+        "MeshPart": 136,
+        "BindableEvent": 1,
+        "WeldConstraint": 22,
+        "Folder": 109,
+        "Animator": 1,
+        "Attachment": 80,
+        "Texture": 49,
+        "Script": 17,
+        "Seat": 8,
+        "Camera": 1,
+        "TextLabel": 7,
+        "ProximityPrompt": 7,
+        "RemoteEvent": 7,
+        "ParticleEmitter": 14,
+        "SurfaceGui": 1,
+        "StringValue": 2,
+        "Weld": 432,
+        "UIStroke": 1,
+        "Terrain": 1,
+        "Animation": 2,
+        "UICorner": 6,
+        "Decal": 25,
+        "SpawnLocation": 2,
+        "HingeConstraint": 32,
+        "Beam": 4,
+        "PointLight": 19,
+        "BillboardGui": 6,
+        "Model": 312,
+        "TrussPart": 1,
+        "Motor6D": 6,
+        "WedgePart": 242,
+        "UnionOperation": 81
+      },
+      "descendants": 4948
+    },
+    "ReplicatedStorage": {
+      "classes": [],
+      "descendants": 0
+    },
+    "ServerStorage": {
+      "classes": {
+        "Humanoid": 11,
+        "Part": 18040,
+        "MeshPart": 510,
+        "BindableEvent": 9,
+        "WeldConstraint": 52,
+        "Folder": 478,
+        "Animator": 10,
+        "Attachment": 318,
+        "Texture": 128,
+        "Script": 155,
+        "WedgePart": 994,
+        "BlockMesh": 20,
+        "TextLabel": 79,
+        "ProximityPrompt": 68,
+        "RemoteEvent": 67,
+        "ParticleEmitter": 43,
+        "LocalScript": 1,
+        "BillboardGui": 73,
+        "StringValue": 4,
+        "Weld": 1650,
+        "UIStroke": 11,
+        "Animation": 20,
+        "UICorner": 73,
+        "SpawnLocation": 19,
+        "HingeConstraint": 120,
+        "Decal": 90,
+        "PointLight": 200,
+        "SurfaceGui": 6,
+        "UnionOperation": 346,
+        "Motor6D": 60,
+        "Beam": 26,
+        "Seat": 30,
+        "Model": 1542
+      },
+      "descendants": 25253
+    },
+    "StarterGui": {
+      "classes": [],
+      "descendants": 0
+    },
+    "StarterPlayer": {
+      "classes": {
+        "LocalScript": 1,
+        "StarterPlayerScripts": 1,
+        "StarterCharacterScripts": 1
+      },
+      "descendants": 3
+    },
+    "Lighting": {
+      "classes": {
+        "SunRaysEffect": 1,
+        "Sky": 1,
+        "Atmosphere": 1,
+        "DepthOfFieldEffect": 1,
+        "BloomEffect": 1
+      },
+      "descendants": 5
+    },
+    "SoundService": {
+      "classes": [],
+      "descendants": 0
+    }
+  },
+  "assetReferenceSummary": {
+    "ParticleEmitter.Texture": {
+      "uses": 57,
+      "distinct": 2
+    },
+    "Decal.Texture": {
+      "uses": 115,
+      "distinct": 2
+    },
+    "Animation.AnimationId": {
+      "uses": 22,
+      "distinct": 2
+    },
+    "Texture.Texture": {
+      "uses": 177,
+      "distinct": 5
+    },
+    "Beam.Texture": {
+      "uses": 4,
+      "distinct": 1
+    },
+    "MeshPart.MeshId": {
+      "uses": 646,
+      "distinct": 4
+    }
+  },
+  "authoritativeScriptsOutsideServerStorage": [
+    {
+      "class": "LocalScript",
+      "path": "game.StarterPlayer.StarterPlayerScripts.HideLocalCharacter"
+    },
+    {
+      "class": "Script",
+      "path": "game.Workspace.Graybox.RescueSequence"
+    },
+    {
+      "class": "Script",
+      "path": "game.Workspace.PlayableGateV1.Gameplay.DispatchClient"
+    },
+    {
+      "class": "Script",
+      "path": "game.Workspace.PlayableGateV1.Gameplay.DispatchServer"
+    },
+    {
+      "class": "Script",
+      "path": "game.Workspace.PlayableGateV1.Gameplay.EnvironmentPolishV2.BurntStateVisualController"
+    },
+    {
+      "class": "Script",
+      "path": "game.Workspace.PlayableGateV1.Gameplay.ExteriorGateFeedback"
+    },
+    {
+      "class": "Script",
+      "path": "game.Workspace.PlayableGateV1.Gameplay.FireChallengeClient"
+    },
+    {
+      "class": "Script",
+      "path": "game.Workspace.PlayableGateV1.Gameplay.FireChallengeHazardServer"
+    },
+    {
+      "class": "Script",
+      "path": "game.Workspace.PlayableGateV1.Gameplay.FireChallengeServer"
+    },
+    {
+      "class": "Script",
+      "path": "game.Workspace.PlayableGateV1.Gameplay.FrontDoorController"
+    },
+    {
+      "class": "Script",
+      "path": "game.Workspace.PlayableGateV1.Gameplay.PetRescueController"
+    },
+    {
+      "class": "Script",
+      "path": "game.Workspace.PlayableGateV1.Gameplay.PlayableGateClient"
+    },
+    {
+      "class": "Script",
+      "path": "game.Workspace.PlayableGateV1.Gameplay.PlayableGateServer"
+    },
+    {
+      "class": "Script",
+      "path": "game.Workspace.PlayableGateV1.Gameplay.PlayerHazardClient"
+    },
+    {
+      "class": "Script",
+      "path": "game.Workspace.PlayableGateV1.Gameplay.PlayerHazardServer"
+    },
+    {
+      "class": "Script",
+      "path": "game.Workspace.PlayableGateV1.Gameplay.RescueFollowerController"
+    },
+    {
+      "class": "Script",
+      "path": "game.Workspace.PlayableGateV1.Gameplay.WaterImpactVFX.WaterVFXClient"
+    },
+    {
+      "class": "Script",
+      "path": "game.Workspace.RescueResidentialPreview.RescuePreviewSequence"
+    }
+  ],
+  "criticalSpatial": {
+    "HoseStation": {
+      "size": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "position": [
+        9857.0615234375,
+        2.549999952316284,
+        -45.0322265625
+      ]
+    },
+    "InteriorV2": {
+      "size": [
+        5900.64990234375,
+        126.50999450683594,
+        81.9000015258789
+      ],
+      "position": [
+        13152.1748046875,
+        62.24500274658203,
+        -29.450000762939453
+      ]
+    }
+  },
+  "limitations": {
+    "terrainVoxelPayloadExported": false,
+    "assetIdsExported": false,
+    "binaryAssetsExported": false,
+    "fullPlaceFileExported": false
+  },
+  "inventorySha256": "e8dce1607fefb0a65883bb981944504c59a4cb0b7c6328b9f60646e03fc6661f"
+}
