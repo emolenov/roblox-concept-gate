@@ -1,0 +1,57 @@
+{
+  "status": "pass_bounded_recovery_payload",
+  "captured_utc": "2026-09-17T10:55:55Z",
+  "place_id": 78904936179345,
+  "place_version": 221,
+  "mission_type": "Random",
+  "studio_mode": "Edit",
+  "resolution": 4,
+  "fullbox_bounds_cells": [
+    2303,
+    2623,
+    -126,
+    32,
+    -256,
+    256
+  ],
+  "expanded_empty_shell_bounds_cells": [
+    2239,
+    2687,
+    -190,
+    96,
+    -320,
+    320
+  ],
+  "empty_shell_margin_studs": 256,
+  "exported_occupied_voxels": 155120,
+  "materials": {
+    "Grass": 54122,
+    "LeafyGrass": 100148,
+    "Ground": 850
+  },
+  "occupied_extents_cells": {
+    "min": [
+      2421,
+      -14,
+      -69
+    ],
+    "max": [
+      2611,
+      0,
+      61
+    ]
+  },
+  "gzip_sha256": "f39a2dfd7bb62e74abbcc7f00a3d28f419f2a7006faee055825985b7cde94a95",
+  "decompressed_sha256": "5c4a9b8ea2d35b5a0cefdc865b9e17fcaf28e8ea0431aaddfd770fcbb254e066",
+  "decompressed_bytes": 4590681,
+  "v220_decompressed_sha256": "5c4a9b8ea2d35b5a0cefdc865b9e17fcaf28e8ea0431aaddfd770fcbb254e066",
+  "byte_identical_decompressed_to_v220": true,
+  "bounded_exterior_shell_empty": true,
+  "terrain_count_cells": 124338,
+  "countcells_comparator_valid": false,
+  "countcells_note": "Terrain:CountCells() is a different metric from ReadVoxels occupancy and is not used as the completeness criterion.",
+  "studio_writes": 0,
+  "save_publish_performed": false,
+  "file": "C:\\Users\\DOM\\Documents\\RescueTownOps\\TERRAIN_VOXELS_V221_FULLBOX.jsonl.gz",
+  "scan_result": "C:\\Users\\DOM\\Documents\\RescueTownOps\\TERRAIN_EXTERIOR_SCAN_V221_RESULT.json"
+}

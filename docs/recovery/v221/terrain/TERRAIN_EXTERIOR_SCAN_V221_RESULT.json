@@ -1,0 +1,141 @@
+{
+  "status": "pass",
+  "captured_utc": "2026-09-17T10:51:50Z",
+  "place_id": 78904936179345,
+  "place_version": 221,
+  "mission_type": "Random",
+  "studio_id": "518849a2-b3ea-42ce-ae2a-bab718882a89",
+  "studio_mode": "Edit",
+  "resolution": 4,
+  "inner_bounds_cells": [
+    2303,
+    2623,
+    -126,
+    32,
+    -256,
+    256
+  ],
+  "expanded_bounds_cells": [
+    2239,
+    2687,
+    -190,
+    96,
+    -320,
+    320
+  ],
+  "margin_cells": 64,
+  "margin_studs": 256,
+  "prior_payload": "C:\\Users\\DOM\\Documents\\RescueTownOps\\TERRAIN_VOXELS_V220_FULLBOX.jsonl.gz",
+  "prior_payload_sha256": "a3a8ae25f82bb3a7f58f599d359a977b93c203a90626873a504db845b4a4f50c",
+  "prior_fingerprint": {
+    "n": 155120,
+    "materials": {
+      "Grass": 54122,
+      "LeafyGrass": 100148,
+      "Ground": 850
+    },
+    "h1": 1356436332,
+    "h2": 737234925,
+    "min": [
+      2421,
+      -14,
+      -69
+    ],
+    "max": [
+      2611,
+      0,
+      61
+    ]
+  },
+  "current_inner_fingerprint": {
+    "n": 155120,
+    "materials": {
+      "Grass": 54122,
+      "LeafyGrass": 100148,
+      "Ground": 850
+    },
+    "h1": 1356436332,
+    "h2": 737234925,
+    "min": [
+      2421,
+      -14,
+      -69
+    ],
+    "max": [
+      2611,
+      0,
+      61
+    ],
+    "calls": 120,
+    "hit_chunks": []
+  },
+  "inner_matches_v220_payload": true,
+  "exterior_shell": {
+    "x_left": {
+      "n": 0,
+      "materials": {},
+      "h1": 0,
+      "h2": 0,
+      "min": null,
+      "max": null,
+      "calls": 50,
+      "hit_chunks": []
+    },
+    "x_right": {
+      "n": 0,
+      "materials": {},
+      "h1": 0,
+      "h2": 0,
+      "min": null,
+      "max": null,
+      "calls": 50,
+      "hit_chunks": []
+    },
+    "y_low": {
+      "n": 0,
+      "materials": {},
+      "h1": 0,
+      "h2": 0,
+      "min": null,
+      "max": null,
+      "calls": 50,
+      "hit_chunks": []
+    },
+    "y_high": {
+      "n": 0,
+      "materials": {},
+      "h1": 0,
+      "h2": 0,
+      "min": null,
+      "max": null,
+      "calls": 50,
+      "hit_chunks": []
+    },
+    "z_low": {
+      "n": 0,
+      "materials": {},
+      "h1": 0,
+      "h2": 0,
+      "min": null,
+      "max": null,
+      "calls": 15,
+      "hit_chunks": []
+    },
+    "z_high": {
+      "n": 0,
+      "materials": {},
+      "h1": 0,
+      "h2": 0,
+      "min": null,
+      "max": null,
+      "calls": 15,
+      "hit_chunks": []
+    }
+  },
+  "exterior_shell_occupied": 0,
+  "bounded_exterior_shell_empty": true,
+  "terrain_count_cells": 124338,
+  "countcells_used_as_completeness_criterion": false,
+  "studio_writes": 0,
+  "save_publish_performed": false
+}
