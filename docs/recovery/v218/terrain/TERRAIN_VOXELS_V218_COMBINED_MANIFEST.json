@@ -1,0 +1,71 @@
+{
+  "status": "partial",
+  "captured_utc": "2026-09-17T06:53:29Z",
+  "place_id": 78904936179345,
+  "place_version": 218,
+  "terrain_count_cells": 124338,
+  "combined_occupied_voxels": 22602,
+  "count_match": false,
+  "regions": [
+    {
+      "status": "partial",
+      "captured_utc": "2026-09-17T06:51:34Z",
+      "place_id": 78904936179345,
+      "place_version": 218,
+      "mission_type": "Random",
+      "resolution": 4,
+      "bounds_cells": {
+        "min": [
+          -1,
+          -1,
+          -57
+        ],
+        "max_exclusive": [
+          4026,
+          32,
+          61
+        ]
+      },
+      "rpc_calls": 187,
+      "leaf_records": 46,
+      "exported_occupied_voxels": 22602,
+      "terrain_count_cells": 124338,
+      "count_match": false,
+      "gzip_sha256": "f29491cafc6161c10c43142bd8b709ec93a27fb62188fd42b941028ff5064884",
+      "gzip_bytes": 60707,
+      "file": "C:\\Users\\DOM\\Documents\\RescueTownOps\\TERRAIN_VOXELS_V218.jsonl.gz",
+      "studio_writes": 0
+    },
+    {
+      "status": "partial",
+      "captured_utc": "2026-09-17T06:53:29Z",
+      "place_id": 78904936179345,
+      "place_version": 218,
+      "mission_type": "Random",
+      "resolution": 4,
+      "bounds_cells": {
+        "min": [
+          -256,
+          -126,
+          -256
+        ],
+        "max_exclusive": [
+          -1,
+          32,
+          256
+        ]
+      },
+      "rpc_calls": 32,
+      "leaf_records": 0,
+      "exported_occupied_voxels": 0,
+      "first_region_voxels": 22602,
+      "combined_occupied_voxels": 22602,
+      "terrain_count_cells": 124338,
+      "combined_count_match": false,
+      "gzip_sha256": "9461b90743011da39e84fb679ca3c54c7b161bd85bb1b1c059b42d2c50fa14d4",
+      "gzip_bytes": 69,
+      "file": "C:\\Users\\DOM\\Documents\\RescueTownOps\\TERRAIN_VOXELS_V218_NEGATIVE_X.jsonl.gz",
+      "studio_writes": 0
+    }
+  ]
+}
