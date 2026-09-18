@@ -359,6 +359,21 @@ Players.PlayerRemoving:Connect(function(player)
 		and hoseStation:GetAttribute("HoseOwnerUserId") == player.UserId then
 		setHoseStationState(HOSE_STORED, nil)
 	end
+	if gate:GetAttribute("RescueFollowerActive") == true
+		and gate:GetAttribute("RescueFollowerPlayerUserId") == player.UserId
+		and gate:GetAttribute("ResidentRescued") ~= true then
+		local upperHall = fireTargets:FindFirstChild("InteriorFire_UpperHall")
+		local rescueRoom = fireTargets:FindFirstChild("InteriorFire_RescueRoom")
+		local rescueReady = activeMission.Value == "Resident"
+			and upperHall ~= nil
+			and rescueRoom ~= nil
+			and upperHall:GetAttribute("Extinguished") == true
+			and rescueRoom:GetAttribute("Extinguished") == true
+		gate:SetAttribute("RescueFollowerPlayerUserId", nil)
+		gate:SetAttribute("RescueFollowerActive", false)
+		gate:SetAttribute("RescueReady", rescueReady)
+		rescuePrompt.Enabled = rescueReady
+	end
 end)
 
 resetMissionRequest.Event:Connect(resetMissionAfterDeath)
