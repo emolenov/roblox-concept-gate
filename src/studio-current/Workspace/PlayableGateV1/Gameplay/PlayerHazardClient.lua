@@ -191,12 +191,17 @@ local function pulseFireDamage()
 		flashTween:Cancel()
 	end
 	fireFlash.BackgroundTransparency = 0.82
-	flashTween = TweenService:Create(
+	local tween = TweenService:Create(
 		fireFlash,
 		TweenInfo.new(0.26, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
 		{BackgroundTransparency = 1}
 	)
-	flashTween:Play()
+	flashTween = tween
+	tween.Completed:Once(function()
+		if flashTween == tween then flashTween = nil end
+		tween:Destroy()
+	end)
+	tween:Play()
 end
 
 local function setSmokeState(insideSmoke, dangerous, intensity)
@@ -208,12 +213,21 @@ local function setSmokeState(insideSmoke, dangerous, intensity)
 	if insideSmoke then
 		targetTransparency = dangerous and 0.78 or (0.92 - 0.05 * math.clamp(intensity or 0, 0, 1))
 	end
-	smokeTween = TweenService:Create(
+	if math.abs(smokeOverlay.BackgroundTransparency - targetTransparency) < 0.001 then
+		smokeOverlay.BackgroundTransparency = targetTransparency
+		return
+	end
+	local tween = TweenService:Create(
 		smokeOverlay,
 		TweenInfo.new(insideSmoke and 0.12 or 0.18, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
 		{BackgroundTransparency = targetTransparency}
 	)
-	smokeTween:Play()
+	smokeTween = tween
+	tween.Completed:Once(function()
+		if smokeTween == tween then smokeTween = nil end
+		tween:Destroy()
+	end)
+	tween:Play()
 end
 
 player.CharacterAdded:Connect(function(character)
