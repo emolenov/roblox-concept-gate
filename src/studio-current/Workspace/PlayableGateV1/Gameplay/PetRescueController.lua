@@ -555,17 +555,35 @@ resetRequest.Event:Connect(function(reason)
 	end)
 end)
 
-Players.PlayerAdded:Connect(function(player)
+local function returnCarriedPetAfterPlayerLoss(player)
+	if petOwnerUserId ~= player.UserId or gate:GetAttribute("PetCarried") ~= true then return end
+	clearCarryWeld()
 	player:SetAttribute("CarryingPet", false)
+	petOwnerUserId = nil
+	setPetAnchored(true)
+	if typeof(initialPetPivot) == "CFrame" then pet:PivotTo(initialPetPivot) end
+	pet:SetAttribute("PetState", "Waiting")
+	gate:SetAttribute("PetCarried", false)
+	refreshPetPrompt()
+	if activeMission.Value == "Pet" and gate:GetAttribute("MissionCompleted") ~= true then
+		sendToAll("КОТЁНОК СНОВА НА КРЫШЕ — ЗАБЕРИ ЕГО", 5)
+	end
+end
+
+local function preparePlayer(player)
+	player:SetAttribute("CarryingPet", false)
+	player.CharacterRemoving:Connect(function()
+		returnCarriedPetAfterPlayerLoss(player)
+	end)
 	task.delay(3, function()
 		if player.Parent and activeMission.Value == "Pet" then
 			sendToPlayer(player, "КОТЁНОК ЗАСТРЯЛ НА КРЫШЕ!", 5)
 		end
 	end)
-end)
-for _, player in ipairs(Players:GetPlayers()) do
-	player:SetAttribute("CarryingPet", false)
 end
+for _, player in ipairs(Players:GetPlayers()) do preparePlayer(player) end
+Players.PlayerAdded:Connect(preparePlayer)
+Players.PlayerRemoving:Connect(returnCarriedPetAfterPlayerLoss)
 
 RunService.Heartbeat:Connect(function()
 	if activeMission.Value ~= "Pet" then return end
