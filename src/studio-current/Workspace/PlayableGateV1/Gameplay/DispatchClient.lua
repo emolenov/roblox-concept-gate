@@ -92,18 +92,18 @@ local actionsBound = false
 local mobileDriveButtons = {}
 if UserInputService.TouchEnabled then
 	local layout = {
-		DispatchForward = {"GO", UDim2.fromScale(0.72, 0.68)},
-		DispatchBackward = {"BACK", UDim2.fromScale(0.72, 0.86)},
-		DispatchLeft = {"<", UDim2.fromScale(0.62, 0.78)},
-		DispatchRight = {">", UDim2.fromScale(0.80, 0.78)},
-		DispatchExit = {"EXIT", UDim2.fromScale(0.80, 0.58)},
+		DispatchForward = {"GO", UDim2.new(1, -235, 1, -168)},
+		DispatchBackward = {"BACK", UDim2.new(1, -235, 1, -72)},
+		DispatchLeft = {"<", UDim2.new(1, -305, 1, -120)},
+		DispatchRight = {">", UDim2.new(1, -165, 1, -120)},
+		DispatchExit = {"EXIT", UDim2.new(1, -165, 1, -200)},
 	}
 	for name, config in pairs(layout) do
 		local button = Instance.new("TextButton")
 		button.Name = name
 		button.AnchorPoint = Vector2.new(0.5, 0.5)
 		button.Position = config[2]
-		button.Size = UDim2.fromOffset(78, 78)
+		button.Size = UDim2.fromOffset(64, 64)
 		button.BackgroundColor3 = Color3.fromRGB(28, 42, 58)
 		button.BackgroundTransparency = 0.08
 		button.BorderSizePixel = 0
