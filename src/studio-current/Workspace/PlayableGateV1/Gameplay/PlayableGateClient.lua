@@ -157,7 +157,7 @@ local function ensureMobileSprayButton()
 	mobileSprayButton = Instance.new("TextButton")
 	mobileSprayButton.Name = "SprayButton"
 	mobileSprayButton.AnchorPoint = Vector2.new(0.5, 0.5)
-	mobileSprayButton.Position = UDim2.fromScale(0.87, 0.64)
+	mobileSprayButton.Position = UDim2.fromScale(0.78, 0.64)
 	mobileSprayButton.Size = UDim2.fromOffset(96, 96)
 	mobileSprayButton.BackgroundColor3 = Color3.fromRGB(35, 126, 185)
 	mobileSprayButton.BackgroundTransparency = 0.12

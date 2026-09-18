@@ -66,7 +66,7 @@ controlsCorner.Parent = controls
 local mobileEnterButton = Instance.new("TextButton")
 mobileEnterButton.Name = "MobileDriveButton"
 mobileEnterButton.AnchorPoint = Vector2.new(0.5, 0.5)
-mobileEnterButton.Position = UDim2.fromScale(0.86, 0.74)
+mobileEnterButton.Position = UDim2.fromScale(0.60, 0.74)
 mobileEnterButton.Size = UDim2.fromOffset(118, 64)
 mobileEnterButton.BackgroundColor3 = Color3.fromRGB(196, 48, 42)
 mobileEnterButton.BackgroundTransparency = 0.08
@@ -95,8 +95,8 @@ if UserInputService.TouchEnabled then
 		DispatchForward = {"GO", UDim2.fromScale(0.72, 0.68)},
 		DispatchBackward = {"BACK", UDim2.fromScale(0.72, 0.86)},
 		DispatchLeft = {"<", UDim2.fromScale(0.62, 0.78)},
-		DispatchRight = {">", UDim2.fromScale(0.82, 0.78)},
-		DispatchExit = {"EXIT", UDim2.fromScale(0.90, 0.58)},
+		DispatchRight = {">", UDim2.fromScale(0.80, 0.78)},
+		DispatchExit = {"EXIT", UDim2.fromScale(0.80, 0.58)},
 	}
 	for name, config in pairs(layout) do
 		local button = Instance.new("TextButton")
