@@ -1,0 +1,243 @@
+{
+  "schema_version": 2,
+  "snapshot_type": "current_studio_code_source_snapshot_only",
+  "captured_at_utc": "2026-09-18T01:51:44Z",
+  "place": {
+    "place_id": 78904936179345,
+    "place_version": 249,
+    "mission_type": "Random",
+    "expected_root": "Workspace.PlayableGateV1",
+    "studio_id": "e7a85468-9a1b-478f-94d5-81b24e78b40a"
+  },
+  "counts": {
+    "non_serverstorage_base_scripts": 18,
+    "exported_scripts": 18,
+    "serverstorage_base_scripts_excluded": 156
+  },
+  "enumeration_verified_exact": true,
+  "secret_indicator_count": 0,
+  "secret_indicator_paths": [],
+  "scripts": [
+    {
+      "data_model_path": "Workspace.PlayableGateV1.Gameplay.PlayableGateServer",
+      "class_name": "Script",
+      "enabled": true,
+      "disabled": false,
+      "run_context": "Enum.RunContext.Server",
+      "role": "current_code",
+      "scope_group": "playable_root",
+      "local_relative_export_path": "current/Workspace/PlayableGateV1/Gameplay/PlayableGateServer.lua",
+      "source_length": 22194,
+      "sha256": "7c41ce448884cf3eac3d3f338a331e6ac5716f69d7ffa3983568cc2849eada67"
+    },
+    {
+      "data_model_path": "Workspace.PlayableGateV1.Gameplay.PlayableGateClient",
+      "class_name": "Script",
+      "enabled": true,
+      "disabled": false,
+      "run_context": "Enum.RunContext.Client",
+      "role": "current_code",
+      "scope_group": "playable_root",
+      "local_relative_export_path": "current/Workspace/PlayableGateV1/Gameplay/PlayableGateClient.lua",
+      "source_length": 16022,
+      "sha256": "6ee57832088b8afb28688f1d531d13cdb297928a52b1713b457da1bd08d22201"
+    },
+    {
+      "data_model_path": "Workspace.PlayableGateV1.Gameplay.ExteriorGateFeedback",
+      "class_name": "Script",
+      "enabled": true,
+      "disabled": false,
+      "run_context": "Enum.RunContext.Server",
+      "role": "current_code",
+      "scope_group": "playable_root",
+      "local_relative_export_path": "current/Workspace/PlayableGateV1/Gameplay/ExteriorGateFeedback.lua",
+      "source_length": 941,
+      "sha256": "342ff7e3d7e226c9baef2a2c9244be9ad29ccbd8adcfb06986305c38f5683fd3"
+    },
+    {
+      "data_model_path": "Workspace.PlayableGateV1.Gameplay.FrontDoorController",
+      "class_name": "Script",
+      "enabled": true,
+      "disabled": false,
+      "run_context": "Enum.RunContext.Server",
+      "role": "current_code",
+      "scope_group": "playable_root",
+      "local_relative_export_path": "current/Workspace/PlayableGateV1/Gameplay/FrontDoorController.lua",
+      "source_length": 7306,
+      "sha256": "0d7b098e56a7005300a2bf7b16858a32528d35a46dc37e4aae6693e91b73884b"
+    },
+    {
+      "data_model_path": "Workspace.PlayableGateV1.Gameplay.RescueFollowerController",
+      "class_name": "Script",
+      "enabled": true,
+      "disabled": false,
+      "run_context": "Enum.RunContext.Legacy",
+      "role": "current_code",
+      "scope_group": "playable_root",
+      "local_relative_export_path": "current/Workspace/PlayableGateV1/Gameplay/RescueFollowerController.lua",
+      "source_length": 21722,
+      "sha256": "d10b03dc86956f7f3e1d871974337a2050fe08d4946434ecdce764bc40abd1e5"
+    },
+    {
+      "data_model_path": "Workspace.PlayableGateV1.Gameplay.PlayerHazardServer",
+      "class_name": "Script",
+      "enabled": false,
+      "disabled": true,
+      "run_context": "Enum.RunContext.Server",
+      "role": "current_code",
+      "scope_group": "playable_root",
+      "local_relative_export_path": "current/Workspace/PlayableGateV1/Gameplay/PlayerHazardServer.lua",
+      "source_length": 5795,
+      "sha256": "95c5832b65dd2714790d91557d4beb0e41c35208325666440098829d9af19a0e"
+    },
+    {
+      "data_model_path": "Workspace.PlayableGateV1.Gameplay.PlayerHazardClient",
+      "class_name": "Script",
+      "enabled": true,
+      "disabled": false,
+      "run_context": "Enum.RunContext.Client",
+      "role": "current_code",
+      "scope_group": "playable_root",
+      "local_relative_export_path": "current/Workspace/PlayableGateV1/Gameplay/PlayerHazardClient.lua",
+      "source_length": 7556,
+      "sha256": "3ce3712dfcb80ca00aeabe402989aeabcc3a6fc9cae42ed1865f932953ababbb"
+    },
+    {
+      "data_model_path": "Workspace.PlayableGateV1.Gameplay.FireChallengeServer",
+      "class_name": "Script",
+      "enabled": true,
+      "disabled": false,
+      "run_context": "Enum.RunContext.Server",
+      "role": "current_code",
+      "scope_group": "playable_root",
+      "local_relative_export_path": "current/Workspace/PlayableGateV1/Gameplay/FireChallengeServer.lua",
+      "source_length": 12697,
+      "sha256": "099ea46de94476bafe375943768026d9e74eb307b4783af94765f7bbdb0b04f3"
+    },
+    {
+      "data_model_path": "Workspace.PlayableGateV1.Gameplay.FireChallengeClient",
+      "class_name": "Script",
+      "enabled": true,
+      "disabled": false,
+      "run_context": "Enum.RunContext.Client",
+      "role": "current_code",
+      "scope_group": "playable_root",
+      "local_relative_export_path": "current/Workspace/PlayableGateV1/Gameplay/FireChallengeClient.lua",
+      "source_length": 3433,
+      "sha256": "6f53f058455215e693fe416a5f5a508ac1097ec33ca85b8e925b757e91cf9bc4"
+    },
+    {
+      "data_model_path": "Workspace.PlayableGateV1.Gameplay.FireChallengeHazardServer",
+      "class_name": "Script",
+      "enabled": true,
+      "disabled": false,
+      "run_context": "Enum.RunContext.Server",
+      "role": "current_code",
+      "scope_group": "playable_root",
+      "local_relative_export_path": "current/Workspace/PlayableGateV1/Gameplay/FireChallengeHazardServer.lua",
+      "source_length": 7776,
+      "sha256": "826e6ea62f60b0b1309238bcc61d8b2a2910f0a41a79fa1421c82ceae93c6266"
+    },
+    {
+      "data_model_path": "Workspace.PlayableGateV1.Gameplay.DispatchServer",
+      "class_name": "Script",
+      "enabled": true,
+      "disabled": false,
+      "run_context": "Enum.RunContext.Legacy",
+      "role": "current_code",
+      "scope_group": "playable_root",
+      "local_relative_export_path": "current/Workspace/PlayableGateV1/Gameplay/DispatchServer.lua",
+      "source_length": 15084,
+      "sha256": "2e200ac2986f2b6075f2200c1a288e13ef28fb41584774b65d5a47696c487aa2"
+    },
+    {
+      "data_model_path": "Workspace.PlayableGateV1.Gameplay.DispatchClient",
+      "class_name": "Script",
+      "enabled": true,
+      "disabled": false,
+      "run_context": "Enum.RunContext.Client",
+      "role": "current_code",
+      "scope_group": "playable_root",
+      "local_relative_export_path": "current/Workspace/PlayableGateV1/Gameplay/DispatchClient.lua",
+      "source_length": 9828,
+      "sha256": "38c4ab76fed2d93f992eb1e1ca1a7b5399bac5f7a88f4706ad09e265201d3c04"
+    },
+    {
+      "data_model_path": "Workspace.PlayableGateV1.Gameplay.PetRescueController",
+      "class_name": "Script",
+      "enabled": true,
+      "disabled": false,
+      "run_context": "Enum.RunContext.Legacy",
+      "role": "current_code",
+      "scope_group": "playable_root",
+      "local_relative_export_path": "current/Workspace/PlayableGateV1/Gameplay/PetRescueController.lua",
+      "source_length": 21775,
+      "sha256": "7f718202654548425b64a140ea4403bf5a8ba6270459da4cc2754b752abba286"
+    },
+    {
+      "data_model_path": "Workspace.PlayableGateV1.Gameplay.EnvironmentPolishV2.BurntStateVisualController",
+      "class_name": "Script",
+      "enabled": true,
+      "disabled": false,
+      "run_context": "Enum.RunContext.Legacy",
+      "role": "current_code",
+      "scope_group": "playable_root",
+      "local_relative_export_path": "current/Workspace/PlayableGateV1/Gameplay/EnvironmentPolishV2/BurntStateVisualController.lua",
+      "source_length": 4958,
+      "sha256": "77022a4bb960192c755fdb36b6d5f284b36f2f7010b97b93d2395c1950984f4f"
+    },
+    {
+      "data_model_path": "Workspace.PlayableGateV1.Gameplay.WaterImpactVFX.WaterVFXClient",
+      "class_name": "Script",
+      "enabled": true,
+      "disabled": false,
+      "run_context": "Enum.RunContext.Client",
+      "role": "current_code",
+      "scope_group": "playable_root",
+      "local_relative_export_path": "current/Workspace/PlayableGateV1/Gameplay/WaterImpactVFX/WaterVFXClient.lua",
+      "source_length": 8808,
+      "sha256": "563d2945b5979cd36d2a3fdb640db86aa179ba6ad2ccc24778edb1f75f6ab705"
+    },
+    {
+      "data_model_path": "StarterPlayer.StarterPlayerScripts.HideLocalCharacter",
+      "class_name": "LocalScript",
+      "enabled": false,
+      "disabled": true,
+      "run_context": "Enum.RunContext.Legacy",
+      "role": "current_code",
+      "scope_group": "starter_player_scripts",
+      "local_relative_export_path": "current/StarterPlayer/StarterPlayerScripts/HideLocalCharacter.lua",
+      "source_length": 913,
+      "sha256": "3ca135d6a487ebfb2d12d31af3039e922d617d6ccd95641e4828e8c19bf56f91"
+    },
+    {
+      "data_model_path": "Workspace.RescueResidentialPreview.RescuePreviewSequence",
+      "class_name": "Script",
+      "enabled": false,
+      "disabled": true,
+      "run_context": "Enum.RunContext.Client",
+      "role": "archived_reference",
+      "scope_group": "legacy_workspace_original",
+      "local_relative_export_path": "archived-reference/Workspace/RescueResidentialPreview/RescuePreviewSequence.lua",
+      "source_length": 126588,
+      "sha256": "80c3359f651a5302acaa8800c70ab2960e090a40d8d35fd99940fd6607434755"
+    },
+    {
+      "data_model_path": "Workspace.Graybox.RescueSequence",
+      "class_name": "Script",
+      "enabled": false,
+      "disabled": true,
+      "run_context": "Enum.RunContext.Legacy",
+      "role": "archived_reference",
+      "scope_group": "legacy_workspace_original",
+      "local_relative_export_path": "archived-reference/Workspace/Graybox/RescueSequence.lua",
+      "source_length": 1130,
+      "sha256": "47b2d947e6fe01bffd7ed7030a084b5adb2334d3de2840a49bea7f7798ce3e8f"
+    }
+  ],
+  "limitations": [
+    "Code-only snapshot; not a full .rbxl/.rbxlx backup.",
+    "Terrain, models, binary assets and full DataModel are not recoverable from this snapshot alone.",
+    "ServerStorage backup/inspection copies are enumerated but intentionally excluded from the current source set."
+  ]
+}
