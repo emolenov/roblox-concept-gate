@@ -121,6 +121,19 @@ for _, player in ipairs(Players:GetPlayers()) do preparePlayer(player) end
 Players.PlayerAdded:Connect(preparePlayer)
 Players.PlayerRemoving:Connect(function(player) playerStates[player] = nil end)
 
+resetMissionRequest.Event:Connect(function(reason)
+	if reason ~= "NewMission" then return end
+	for _, player in ipairs(Players:GetPlayers()) do
+		resetPlayerHazardState(player)
+		local character = player.Character
+		local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+		if humanoid and humanoid.Health > 0 then
+			humanoid.MaxHealth = PLAYER_MAX_HEALTH
+			humanoid.Health = PLAYER_MAX_HEALTH
+		end
+	end
+end)
+
 RunService.Heartbeat:Connect(function(deltaTime)
 	local dt = math.min(deltaTime, 0.16)
 	local now = os.clock()
