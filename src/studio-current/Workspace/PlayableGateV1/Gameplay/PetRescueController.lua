@@ -548,6 +548,11 @@ missionType.Changed:Connect(function()
 end)
 
 resetRequest.Event:Connect(function(reason)
+	if typeof(reason) == "Instance"
+		and reason:IsA("Player")
+		and #Players:GetPlayers() > 1 then
+		return
+	end
 	local previousMission = activeMission.Value
 	task.defer(function()
 		task.wait(0.1)

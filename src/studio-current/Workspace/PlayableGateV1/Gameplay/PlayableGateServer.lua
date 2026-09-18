@@ -227,6 +227,28 @@ local function clearPlayerMissionState(player)
 	missionMessage:FireClient(player, "Hide")
 end
 
+local function releasePlayerOwnedSharedState(player)
+	if hoseStation:GetAttribute("HoseState") == HOSE_EQUIPPED
+		and hoseStation:GetAttribute("HoseOwnerUserId") == player.UserId then
+		resetHoseStation()
+	end
+	if gate:GetAttribute("RescueFollowerActive") == true
+		and gate:GetAttribute("RescueFollowerPlayerUserId") == player.UserId
+		and gate:GetAttribute("ResidentRescued") ~= true then
+		local upperHall = fireTargets:FindFirstChild("InteriorFire_UpperHall")
+		local rescueRoom = fireTargets:FindFirstChild("InteriorFire_RescueRoom")
+		local rescueReady = activeMission.Value == "Resident"
+			and upperHall ~= nil
+			and rescueRoom ~= nil
+			and upperHall:GetAttribute("Extinguished") == true
+			and rescueRoom:GetAttribute("Extinguished") == true
+		gate:SetAttribute("RescueFollowerPlayerUserId", nil)
+		gate:SetAttribute("RescueFollowerActive", false)
+		gate:SetAttribute("RescueReady", rescueReady)
+		rescuePrompt.Enabled = rescueReady
+	end
+end
+
 local function resetMissionAfterDeath()
 	resetHoseStation()
 	resetFireTargets()
@@ -355,28 +377,21 @@ Players.PlayerRemoving:Connect(function(player)
 	correctedSpawn[player] = nil
 	portalCooldown[player] = nil
 	exteriorHintCooldown[player] = nil
-	if hoseStation:GetAttribute("HoseState") == HOSE_EQUIPPED
-		and hoseStation:GetAttribute("HoseOwnerUserId") == player.UserId then
-		setHoseStationState(HOSE_STORED, nil)
-	end
-	if gate:GetAttribute("RescueFollowerActive") == true
-		and gate:GetAttribute("RescueFollowerPlayerUserId") == player.UserId
-		and gate:GetAttribute("ResidentRescued") ~= true then
-		local upperHall = fireTargets:FindFirstChild("InteriorFire_UpperHall")
-		local rescueRoom = fireTargets:FindFirstChild("InteriorFire_RescueRoom")
-		local rescueReady = activeMission.Value == "Resident"
-			and upperHall ~= nil
-			and rescueRoom ~= nil
-			and upperHall:GetAttribute("Extinguished") == true
-			and rescueRoom:GetAttribute("Extinguished") == true
-		gate:SetAttribute("RescueFollowerPlayerUserId", nil)
-		gate:SetAttribute("RescueFollowerActive", false)
-		gate:SetAttribute("RescueReady", rescueReady)
-		rescuePrompt.Enabled = rescueReady
-	end
+	releasePlayerOwnedSharedState(player)
 end)
 
-resetMissionRequest.Event:Connect(resetMissionAfterDeath)
+resetMissionRequest.Event:Connect(function(reasonOrPlayer)
+	local scopedDeath = typeof(reasonOrPlayer) == "Instance"
+		and reasonOrPlayer:IsA("Player")
+		and #Players:GetPlayers() > 1
+	if scopedDeath then
+		releasePlayerOwnedSharedState(reasonOrPlayer)
+		clearPlayerMissionState(reasonOrPlayer)
+		waterInput:FireClient(reasonOrPlayer, "Reset")
+		return
+	end
+	resetMissionAfterDeath()
+end)
 
 local function getPlayerFromTouch(hit)
 	local character = hit and hit:FindFirstAncestorOfClass("Model")

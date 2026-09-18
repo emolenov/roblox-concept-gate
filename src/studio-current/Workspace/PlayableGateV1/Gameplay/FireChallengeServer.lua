@@ -339,7 +339,12 @@ for _, player in ipairs(Players:GetPlayers()) do
 	player:SetAttribute("RescuePersonFound", false)
 end
 
-resetRequest.Event:Connect(function()
+resetRequest.Event:Connect(function(reasonOrPlayer)
+	if typeof(reasonOrPlayer) == "Instance"
+		and reasonOrPlayer:IsA("Player")
+		and #Players:GetPlayers() > 1 then
+		return
+	end
 	task.defer(resetChallenge)
 end)
 
