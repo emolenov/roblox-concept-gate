@@ -132,9 +132,18 @@ RunService.Heartbeat:Connect(function(deltaTime)
 		local root = character and character:FindFirstChild("HumanoidRootPart")
 		if not state or not humanoid or humanoid.Health <= 0 or not root then continue end
 		if not dispatchActive then
+			local hadHazardState = state.smokeExposure > 0
+				or state.lastSmokeInside
+				or state.lastSmokeDanger
+				or player:GetAttribute("NearActiveFire") == true
+				or player:GetAttribute("InsideSmokeZone") == true
 			player:SetAttribute("NearActiveFire", false)
+			player:SetAttribute("InsideSmokeZone", false)
+			player:SetAttribute("SmokeExposureSeconds", 0)
 			state.smokeExposure = 0
-			feedback:FireClient(player, "SmokeClear")
+			state.lastSmokeInside = false
+			state.lastSmokeDanger = false
+			if hadHazardState then feedback:FireClient(player, "SmokeClear") end
 			continue
 		end
 
