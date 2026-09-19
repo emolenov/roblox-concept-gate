@@ -1,0 +1,34 @@
+{
+  "status": "pass_cloud_saved_source_parity",
+  "place_id": 78904936179345,
+  "place_version_session": 269,
+  "mission_type": "Random",
+  "verified_utc": "2026-09-19T19:54:06.690Z",
+  "authoritative_script_count": 18,
+  "normalized_match_count": 18,
+  "normalized_differences": [],
+  "snapshot_dir": "C:\\Users\\DOM\\Documents\\RescueTownOps\\code-snapshots\\20260919T195345Z-place-78904936179345-v269",
+  "secret_indicator_count": 0,
+  "recovery_parent_commit": "ff92038e37505603a6844203c60848cd6b6c820d",
+  "main_expected_unchanged": "2a73395f9adfeb346e46e247cddbc38a6f183623",
+  "live_fix": {
+    "script": "Workspace.PlayableGateV1.Gameplay.PlayableGateClient",
+    "change": "Corrected mojibake in the desktop hose instruction to readable Russian text already present in recovery source.",
+    "backup_dir": "C:\\Users\\DOM\\Documents\\RescueTownOps\\backups\\instruction-encoding-v269-20260919T195212Z",
+    "runtime_artifact": "INSTRUCTION_ENCODING_FIX_V269_RUNTIME.json",
+    "diagnostic_direct_state_write_used": true,
+    "counts_as_gameplay_playthrough": false,
+    "runtime_ui_text_match": true,
+    "runtime_console_game_error_detected": false
+  },
+  "cloud_save": {
+    "confirmed": true,
+    "utc": "2026-09-19T19:54:06.690Z",
+    "evidence": [
+      "StudioSavePlaceToCloud: 2984ms",
+      "PublishSuccessful",
+      "Saved new changes in Ворота слепых концепций to Roblox"
+    ],
+    "public_release_performed": false
+  }
+}
