@@ -1,0 +1,56 @@
+{
+    "status":  "pass_cloud_saved_reverse_full_e2e",
+    "place_id":  78904936179345,
+    "studio_session_version":  257,
+    "mission_type":  "Random",
+    "script":  "Workspace.PlayableGateV1.Gameplay.FireChallengeHazardServer",
+    "change":  "Effective far-range fire damage cap reduced from 10 to 6; FireChallengeV1 FireDamageFar config remains 15; near/mid remain 60/35.",
+    "rationale":  "Resident-first replay under cap 10 reproduced a death-signature challenge reset at InteriorFire_Hall. With cap 6, a genuine Resident -\u003e New Call -\u003e Pet run completed both missions without direct gameplay state writes or teleport shortcuts.",
+    "source_after_sha256":  "263b4607d20ce786e2785a5603eecce52ff9425e8d9c6e4059ae96ac39ca7890",
+    "backup_dir":  "C:\\Users\\DOM\\Documents\\RescueTownOps\\backups\\fire-far-survivability-20260919T165801Z",
+    "acceptance":  {
+                       "artifact":  "CONSECUTIVE_RESIDENT_TO_PET_V257_RESULT.json",
+                       "completed_utc":  "2026-09-19T17:08:22Z",
+                       "pass":  true,
+                       "first_mission":  "Resident",
+                       "first_completed":  true,
+                       "first_completion_health":  35.113418579101563,
+                       "hall_fire_before":  2.5,
+                       "hall_fire_after":  0,
+                       "hall_health_before_spray":  77.410209655761719,
+                       "hall_health_after_spray":  35.113418579101563,
+                       "hall_attempt_before":  2,
+                       "hall_attempt_after":  2,
+                       "hall_smoke_before":  false,
+                       "hall_smoke_after":  false,
+                       "hall_last_hazard_cause_before":  "",
+                       "hall_last_hazard_cause_after":  "",
+                       "reset_invariants_pass":  true,
+                       "second_mission":  "Pet",
+                       "second_completed":  true,
+                       "pet_roof_reached_y":  16.773445129394531,
+                       "pet_pickup_carried":  true,
+                       "direct_gameplay_state_writes_used":  false,
+                       "teleport_shortcuts_used":  false,
+                       "console_game_errors":  0
+                   },
+    "runtime":  {
+                    "artifact":  "FIRE_FAR_SURVIVABILITY_V257_RUNTIME.json",
+                    "config_far":  15,
+                    "effective_far":  6,
+                    "effective_mid":  35,
+                    "effective_near":  60,
+                    "pass":  true
+                },
+    "cloud_save":  {
+                       "confirmed":  true,
+                       "utc":  "2026-09-19T17:09:46.289Z",
+                       "evidence":  [
+                                        "StudioSavePlaceToCloud: 2279ms",
+                                        "PublishSuccessful",
+                                        "Saved new changes to Roblox"
+                                    ]
+                   },
+    "public_release_performed":  false,
+    "main_expected_unchanged":  "2a73395f9adfeb346e46e247cddbc38a6f183623"
+}
