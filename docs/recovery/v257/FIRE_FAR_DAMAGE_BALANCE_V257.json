@@ -1,0 +1,41 @@
+{
+  "status": "pass_cloud_saved_runtime_verified",
+  "place_id": 78904936179345,
+  "studio_session_version": 257,
+  "mission_type": "Random",
+  "change": "Effective far-range fire damage capped at 10 in FireChallengeHazardServer; FireChallengeV1 config attribute remains 15.",
+  "script": "Workspace.PlayableGateV1.Gameplay.FireChallengeHazardServer",
+  "source_after_sha256": "62466527f52dc082e2a339d4912ceca1eed6fe119329beca1cfc793c79f0ee35",
+  "backup_dir": "C:\\Users\\DOM\\Documents\\RescueTownOps\\backups\\fire-far-source-clamp-20260919T152823Z",
+  "acceptance": {
+    "artifact": "FIRE_FAR_DAMAGE_BALANCE_V257_ACCEPTANCE.json",
+    "genuine_resident_route": true,
+    "direct_gameplay_state_writes_used": false,
+    "teleport_shortcuts_used": false,
+    "hall_health_before_spray": 88.99705505371094,
+    "hall_health_after_spray": 31.99424171447754,
+    "hall_fire_before": 2.5,
+    "hall_fire_after": 0,
+    "server_ray_verified": true,
+    "native_real_input": true
+  },
+  "runtime": {
+    "artifact": "FIRE_FAR_DAMAGE_SOURCE_CLAMP_V257_RUNTIME.json",
+    "config_far": 15,
+    "effective_far": 10,
+    "effective_mid": 35,
+    "effective_near": 60,
+    "pass": true
+  },
+  "cloud_save": {
+    "confirmed": true,
+    "utc": "2026-09-19T15:28:35.484Z",
+    "evidence": [
+      "StudioSavePlaceToCloud: 2229ms",
+      "PublishSuccessful",
+      "Saved new changes to Roblox"
+    ]
+  },
+  "public_release_performed": false,
+  "main_expected_unchanged": "2a73395f9adfeb346e46e247cddbc38a6f183623"
+}
