@@ -22,6 +22,13 @@ local hasSprayed = false
 local mobileSprayGui
 local mobileSprayButton
 local LOCAL_SPRAY_ATTRIBUTE = "LocalHoseSpraying"
+local hosePrompt = gameplay:WaitForChild("HoseStation"):WaitForChild("HoseStationVisual"):WaitForChild("DockedNozzle"):WaitForChild("NozzleGrip"):WaitForChild("TakeHosePrompt")
+
+local function updateHosePromptClickability()
+	-- Desktop LMB is the spray control. Do not let the nearby world prompt consume it
+	-- and return the hose while aiming at a fire. Touch players still need tap-to-return.
+	hosePrompt.ClickablePrompt = UserInputService.TouchEnabled or player:GetAttribute("HoseEquipped") ~= true
+end
 
 local function hideInstruction()
 	if instructionGui then
@@ -242,6 +249,7 @@ player:GetAttributeChangedSignal("HoseEquipped"):Connect(function()
 		setWaterVisual(Vector3.zero, Vector3.zero, false)
 		hideInstruction()
 	end
+	updateHosePromptClickability()
 	updateMobileSprayButton()
 end)
 
@@ -322,6 +330,7 @@ end)
 
 ensureStandardCamera()
 setLocalSprayState(false)
+updateHosePromptClickability()
 updateMobileSprayButton()
 if player:GetAttribute("HoseEquipped") == true then
 	showInstruction()
