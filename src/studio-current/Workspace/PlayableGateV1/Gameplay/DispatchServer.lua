@@ -219,6 +219,15 @@ local function updateSessionDriveBest(player, driveRating, tripElapsed)
 	return isBetter
 end
 
+local function drivingBriefingFor(player)
+	local bestRating = player and player:GetAttribute("SessionBestDriveRating")
+	local bestTime = player and player:GetAttribute("SessionBestDriveTime")
+	if DRIVE_RATING_RANK[bestRating] and typeof(bestTime) == "number" then
+		return string.format("ЕДЬ К ВЫЗОВУ • ПОБЕЙ РЕКОРД %s %.1f С", bestRating, bestTime)
+	end
+	return "ЕДЬ ПО ДОРОГЕ К ГОРЯЩЕМУ ДОМУ"
+end
+
 local function setArrived()
 	if gate:GetAttribute("DispatchArrived") == true then return end
 	local tripElapsed = tripStartedAt and (os.clock() - tripStartedAt) or movingTime
@@ -323,7 +332,7 @@ local function tryStartDriving(player)
 		player.Character:PivotTo(vehicleCFrame * CFrame.new(1.5, 0.8, 0))
 		humanoid.Sit = true
 	end
-	dispatchMessage:FireClient(player, "Driving", "ЕДЬ ПО ДОРОГЕ К ГОРЯЩЕМУ ДОМУ")
+	dispatchMessage:FireClient(player, "Driving", drivingBriefingFor(player))
 end
 
 drivePrompt.Triggered:Connect(tryStartDriving)
