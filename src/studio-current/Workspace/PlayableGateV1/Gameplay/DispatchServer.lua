@@ -111,6 +111,10 @@ local BRAKING = 22
 local COAST_DECELERATION = 12
 local STEER_RATE = math.rad(48)
 local INPUT_TIMEOUT = 0.75
+local DRIVE_S_TRIP_SECONDS = 23
+local DRIVE_S_MOVING_SECONDS = 22
+local DRIVE_A_TRIP_SECONDS = 32
+local DRIVE_A_MOVING_SECONDS = 28
 
 local driver = nil
 local throttle = 0
@@ -200,12 +204,26 @@ end
 
 local function setArrived()
 	if gate:GetAttribute("DispatchArrived") == true then return end
+	local tripElapsed = tripStartedAt and (os.clock() - tripStartedAt) or movingTime
+	local stuckCount = truck:GetAttribute("StuckCount") or 0
+	local driveRating = "B"
+	if tripElapsed <= DRIVE_S_TRIP_SECONDS
+		and movingTime <= DRIVE_S_MOVING_SECONDS
+		and stuckCount == 0 then
+		driveRating = "S"
+	elseif tripElapsed <= DRIVE_A_TRIP_SECONDS
+		and movingTime <= DRIVE_A_MOVING_SECONDS
+		and stuckCount <= 1 then
+		driveRating = "A"
+	end
 	gate:SetAttribute("DispatchArrived", true)
 	gate:SetAttribute("DispatchChallengeActive", true)
 	gate:SetAttribute("DispatchState", "Arrived")
 	truck:SetAttribute("Arrived", true)
-	truck:SetAttribute("TripElapsed", tripStartedAt and (os.clock() - tripStartedAt) or 0)
+	truck:SetAttribute("TripElapsed", tripElapsed)
 	truck:SetAttribute("MovingTime", movingTime)
+	truck:SetAttribute("DriveTime", tripElapsed)
+	truck:SetAttribute("DriveRating", driveRating)
 	speed = 0
 	throttle = 0
 	steering = 0
@@ -215,7 +233,11 @@ local function setArrived()
 		player.RespawnLocation = spawnLocation
 	end
 	setHoseAvailability(false)
-	dispatchMessage:FireAllClients("Arrived", "ТЫ НА МЕСТЕ — ВЫХОДИ И БЕРИ ШЛАНГ")
+	dispatchMessage:FireAllClients("Arrived", string.format(
+		"НА МЕСТЕ • %.1f С • ОЦЕНКА %s — БЕРИ ШЛАНГ",
+		tripElapsed,
+		driveRating
+	))
 end
 
 local function releaseDriver(player, placeBesideTruck)
@@ -324,6 +346,8 @@ local function resetDispatchForNewMission()
 	truck:SetAttribute("CurrentSpeed", 0)
 	truck:SetAttribute("TripElapsed", 0)
 	truck:SetAttribute("MovingTime", 0)
+	truck:SetAttribute("DriveTime", nil)
+	truck:SetAttribute("DriveRating", nil)
 	truck:SetAttribute("MaxRecordedSpeed", 0)
 	truck:SetAttribute("FlipCount", 0)
 	truck:SetAttribute("StuckCount", 0)
@@ -400,6 +424,8 @@ truck:SetAttribute("DriverUserId", 0)
 truck:SetAttribute("CurrentSpeed", 0)
 truck:SetAttribute("MaxRecordedSpeed", 0)
 truck:SetAttribute("MovingTime", 0)
+truck:SetAttribute("DriveTime", nil)
+truck:SetAttribute("DriveRating", nil)
 truck:SetAttribute("FlipCount", 0)
 truck:SetAttribute("StuckCount", 0)
 spawnLocation.CFrame = CFrame.new(9848, 0.3, -49)
