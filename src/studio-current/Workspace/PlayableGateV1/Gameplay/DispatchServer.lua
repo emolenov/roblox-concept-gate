@@ -115,6 +115,7 @@ local DRIVE_S_TRIP_SECONDS = 23
 local DRIVE_S_MOVING_SECONDS = 22
 local DRIVE_A_TRIP_SECONDS = 32
 local DRIVE_A_MOVING_SECONDS = 28
+local DRIVE_RATING_RANK = {B = 1, A = 2, S = 3}
 
 local driver = nil
 local throttle = 0
@@ -202,6 +203,22 @@ local function setHoseAvailability(available)
 	hosePrompt.ObjectText = "Пожарный шланг"
 end
 
+local function updateSessionDriveBest(player, driveRating, tripElapsed)
+	if not player then return false end
+	local bestRating = player:GetAttribute("SessionBestDriveRating")
+	local bestTime = player:GetAttribute("SessionBestDriveTime")
+	local ratingRank = DRIVE_RATING_RANK[driveRating] or 0
+	local bestRank = DRIVE_RATING_RANK[bestRating] or 0
+	local isBetter = bestRating == nil
+		or ratingRank > bestRank
+		or (ratingRank == bestRank and (bestTime == nil or tripElapsed < bestTime))
+	if isBetter then
+		player:SetAttribute("SessionBestDriveRating", driveRating)
+		player:SetAttribute("SessionBestDriveTime", tripElapsed)
+	end
+	return isBetter
+end
+
 local function setArrived()
 	if gate:GetAttribute("DispatchArrived") == true then return end
 	local tripElapsed = tripStartedAt and (os.clock() - tripStartedAt) or movingTime
@@ -216,6 +233,7 @@ local function setArrived()
 		and stuckCount <= 1 then
 		driveRating = "A"
 	end
+	local isSessionBest = updateSessionDriveBest(driver, driveRating, tripElapsed)
 	gate:SetAttribute("DispatchArrived", true)
 	gate:SetAttribute("DispatchChallengeActive", true)
 	gate:SetAttribute("DispatchState", "Arrived")
@@ -233,11 +251,11 @@ local function setArrived()
 		player.RespawnLocation = spawnLocation
 	end
 	setHoseAvailability(false)
-	dispatchMessage:FireAllClients("Arrived", string.format(
-		"НА МЕСТЕ • %.1f С • ОЦЕНКА %s — БЕРИ ШЛАНГ",
-		tripElapsed,
-		driveRating
-	))
+	local genericText = string.format("НА МЕСТЕ • %.1f С • ОЦЕНКА %s — БЕРИ ШЛАНГ", tripElapsed, driveRating)
+	local recordText = string.format("НА МЕСТЕ • %.1f С • ОЦЕНКА %s • РЕКОРД! — БЕРИ ШЛАНГ", tripElapsed, driveRating)
+	for _, player in ipairs(Players:GetPlayers()) do
+		dispatchMessage:FireClient(player, "Arrived", player == driver and isSessionBest and recordText or genericText)
+	end
 end
 
 local function releaseDriver(player, placeBesideTruck)
