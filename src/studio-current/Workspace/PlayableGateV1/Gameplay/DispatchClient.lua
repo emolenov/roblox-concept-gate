@@ -87,6 +87,7 @@ mobileEnterButton.Activated:Connect(function()
 end)
 
 local bannerVersion = 0
+local receivedDispatchCall = false
 local held = {W=false, A=false, S=false, D=false}
 local actionsBound = false
 local mobileDriveButtons = {}
@@ -243,6 +244,7 @@ end)
 
 dispatchMessage.OnClientEvent:Connect(function(action, text)
 	if action == "DispatchCall" then
+		receivedDispatchCall = true
 		showBanner(text, nil, false)
 	elseif action == "Driving" then
 		showBanner(text, 4, false)
@@ -265,8 +267,8 @@ gate:GetAttributeChangedSignal("DispatchArrived"):Connect(function()
 	end
 end)
 
-task.delay(1, function()
-	if gate:GetAttribute("DispatchArrived") ~= true then
+task.delay(1.5, function()
+	if gate:GetAttribute("DispatchArrived") ~= true and not receivedDispatchCall then
 		showBanner("ПОЖАР! САДИСЬ В МАШИНУ", nil, false)
 	end
 end)

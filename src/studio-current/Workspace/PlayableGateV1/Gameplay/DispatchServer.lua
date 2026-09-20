@@ -53,7 +53,56 @@ if not vehicleEnter then
 	vehicleEnter.Parent = remotes
 end
 local resetMissionRequest = gameplay:WaitForChild("ResetMissionRequest")
+local activeMission = gameplay:WaitForChild("ActiveMission")
 local residentialStreet = gate:WaitForChild("ResidentialStreet")
+
+local briefingRandom = Random.new()
+local briefingVariants = {
+	Pet = {
+		"КОТЁНОК НА КРЫШЕ — СРОЧНО К ДОМУ",
+		"КОТЁНОК ОТРЕЗАН ОГНЁМ НА КРЫШЕ",
+		"НА КРЫШЕ КОТЁНОК — НУЖНА ПОЖАРНАЯ ПОМОЩЬ",
+	},
+	Resident = {
+		"В ГОРЯЩЕМ ДОМЕ ОСТАЛСЯ ЧЕЛОВЕК",
+		"ЧЕЛОВЕК ЗАБЛОКИРОВАН В ДОМЕ — НУЖНА ЭВАКУАЦИЯ",
+		"ЖИТЕЛЬ ВНУТРИ ГОРЯЩЕГО ДОМА — СРОЧНЫЙ ВЫЗОВ",
+	},
+}
+local lastBriefingIndex = {}
+local currentBriefingMission = nil
+local currentBriefingText = nil
+local function buildIncidentBriefing(isNewCall)
+	local mission = activeMission.Value
+	local variants = briefingVariants[mission]
+	if not variants then
+		currentBriefingMission = mission
+		currentBriefingText = (isNewCall and "НОВЫЙ ВЫЗОВ: " or "ВЫЗОВ: ") .. "ПОЖАР — САДИСЬ В МАШИНУ"
+		return currentBriefingText
+	end
+	local previous = lastBriefingIndex[mission]
+	local index
+	if #variants == 1 then
+		index = 1
+	elseif previous then
+		local roll = briefingRandom:NextInteger(1, #variants - 1)
+		index = roll >= previous and roll + 1 or roll
+	else
+		index = briefingRandom:NextInteger(1, #variants)
+	end
+	lastBriefingIndex[mission] = index
+	currentBriefingMission = mission
+	currentBriefingText = (isNewCall and "НОВЫЙ ВЫЗОВ: " or "ВЫЗОВ: ") .. variants[index]
+	return currentBriefingText
+end
+
+local function currentIncidentBriefing(isNewCall)
+	if currentBriefingText == nil or currentBriefingMission ~= activeMission.Value then
+		return buildIncidentBriefing(isNewCall)
+	end
+	return currentBriefingText
+end
+
 
 local MAX_SPEED = truck:GetAttribute("MaxSpeed") or 22
 local REVERSE_SPEED = 8
@@ -293,8 +342,14 @@ local function resetDispatchForNewMission()
 			root.AssemblyLinearVelocity = Vector3.zero
 			root.AssemblyAngularVelocity = Vector3.zero
 		end
-		dispatchMessage:FireClient(player, "DispatchCall", "НОВЫЙ ВЫЗОВ! САДИСЬ В МАШИНУ")
 	end
+
+	task.delay(0.25, function()
+		local text = buildIncidentBriefing(true)
+		for _, player in ipairs(Players:GetPlayers()) do
+			dispatchMessage:FireClient(player, "DispatchCall", text)
+		end
+	end)
 end
 
 resetMissionRequest.Event:Connect(function(reason)
@@ -326,7 +381,7 @@ local function preparePlayer(player)
 	if player.Character then enforceCurrentDispatchSpawn(player.Character) end
 	task.delay(1, function()
 		if player.Parent and gate:GetAttribute("DispatchArrived") ~= true then
-			dispatchMessage:FireClient(player, "DispatchCall", "ПОЖАР! САДИСЬ В МАШИНУ")
+			dispatchMessage:FireClient(player, "DispatchCall", currentIncidentBriefing(false))
 		end
 	end)
 	player.CharacterRemoving:Connect(function()
