@@ -61,7 +61,7 @@ local function showInstruction()
 	message.TextStrokeTransparency = 0.55
 	message.Font = Enum.Font.GothamBold
 	message.TextScaled = true
-	message.Text = "Зажми левую кнопку мыши и направь воду на огонь"
+	message.Text = UserInputService.TouchEnabled and "Зажми кнопку WATER и направь воду на огонь" or "Зажми левую кнопку мыши и направь воду на огонь"
 	message.Parent = instructionGui
 
 	local corner = Instance.new("UICorner")
