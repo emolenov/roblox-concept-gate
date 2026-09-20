@@ -73,10 +73,19 @@ local wc = Instance.new("UICorner")
 wc.CornerRadius = UDim.new(0,10)
 wc.Parent = warning
 
+local function refreshCounter(activeValue)
+	local active = tonumber(activeValue)
+	if active == nil then
+		active = tonumber(challenge:GetAttribute("ActiveFireCount")) or 0
+	end
+	local extinguished = tonumber(challenge:GetAttribute("ExtinguishedCount")) or 0
+	counter.Text = string.format("ПОТУШЕНО: %d • ГОРИТ: %d", extinguished, active)
+end
+
 local warningVersion = 0
 feedback.OnClientEvent:Connect(function(action, value)
 	if action == "FireCount" then
-		counter.Text = string.format("ОЧАГИ ПОЖАРА: %d", tonumber(value) or 0)
+		refreshCounter(value)
 	elseif action == "Objective" then
 		objective.Text = tostring(value or "")
 	elseif action == "SpreadWarning" then
@@ -89,9 +98,9 @@ feedback.OnClientEvent:Connect(function(action, value)
 	elseif action == "Reset" then
 		warningVersion += 1
 		warning.Visible = false
-		counter.Text = string.format("ОЧАГИ ПОЖАРА: %d", challenge:GetAttribute("ActiveFireCount") or 0)
+		refreshCounter()
 		objective.Text = ""
 	end
 end)
 
-counter.Text = string.format("ОЧАГИ ПОЖАРА: %d", challenge:GetAttribute("ActiveFireCount") or 0)
+refreshCounter()
