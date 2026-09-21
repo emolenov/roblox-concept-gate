@@ -104,7 +104,7 @@ local function currentObjective(player)
 	end
 	if activeMission.Value == "Pet" then
 		if player:GetAttribute("CarryingPet") == true then
-			return "СПУСТИСЬ И ОТНЕСИ КОТЁНКА В БЕЗОПАСНУЮ ЗОНУ"
+			return "ОТНЕСИ КОТЁНКА В БЕЗОПАСНУЮ ЗОНУ"
 		elseif gate:GetAttribute("LadderState") == "Deployed" then
 			return "ПОДНИМИСЬ ПО ЛЕСТНИЦЕ К КОТЁНКУ"
 		elseif gate:GetAttribute("ExteriorFiresOut") == true then
