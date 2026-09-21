@@ -112,7 +112,12 @@ local function currentObjective(player)
 		end
 		return ""
 	end
-	if player:GetAttribute("RescuePersonFound") == true then
+	if gate:GetAttribute("RescueFollowerActive") == true then
+		if rescueResident:GetAttribute("FollowerSpace") == "Exterior" then
+			return "ДОВЕДИ ЧЕЛОВЕКА ДО БЕЗОПАСНОЙ ЗОНЫ"
+		end
+		return "ВЕДИ ЧЕЛОВЕКА К ВЫХОДУ"
+	elseif player:GetAttribute("RescuePersonFound") == true then
 		return "РАСЧИСТИ ПУТЬ И ВЫВЕДИ ЧЕЛОВЕКА"
 	elseif gate:GetAttribute("ExteriorFiresOut") == true then
 		return "ОТКРОЙ ДВЕРЬ И НАЙДИ ЧЕЛОВЕКА"
@@ -295,6 +300,14 @@ gate:GetAttributeChangedSignal("LadderState"):Connect(function()
 end)
 
 gate:GetAttributeChangedSignal("PetCarried"):Connect(function()
+	publish()
+end)
+
+gate:GetAttributeChangedSignal("RescueFollowerActive"):Connect(function()
+	publish()
+end)
+
+rescueResident:GetAttributeChangedSignal("FollowerSpace"):Connect(function()
 	publish()
 end)
 
