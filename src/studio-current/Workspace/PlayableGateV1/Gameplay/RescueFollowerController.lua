@@ -526,6 +526,12 @@ local function completeRescue(player, playerRoot)
 	if followerStartedAt > 0 then
 		gate:SetAttribute("FollowerTotalElapsedSeconds", workspace:GetServerTimeNow() - followerStartedAt)
 	end
+	local started = player:GetAttribute("MissionStartTime")
+	local missionElapsed = typeof(started) == "number"
+		and math.max(0, workspace:GetServerTimeNow() - started) or nil
+	if missionElapsed then
+		gate:SetAttribute("MissionElapsedSeconds", missionElapsed)
+	end
 	gate:SetAttribute("ResidentRescued", true)
 	gate:SetAttribute("MissionCompleted", true)
 	gate:SetAttribute("RescueReady", false)
@@ -536,13 +542,11 @@ local function completeRescue(player, playerRoot)
 	showIdle()
 
 	successAnchor.Position = resident:GetPivot().Position + Vector3.new(0, 4.2, 0)
-	successBillboard.Message.Text = "ЧЕЛОВЕК СПАСЁН!"
+	local completionText = missionElapsed
+		and string.format("ЧЕЛОВЕК СПАСЁН! • %.1f С", missionElapsed)
+		or "ЧЕЛОВЕК СПАСЁН!"
+	successBillboard.Message.Text = completionText
 	successBillboard.Enabled = true
-
-	local started = player:GetAttribute("MissionStartTime")
-	if typeof(started) == "number" then
-		gate:SetAttribute("MissionElapsedSeconds", workspace:GetServerTimeNow() - started)
-	end
 end
 
 local RETURN_ROUTE_FIRE_NAMES = {

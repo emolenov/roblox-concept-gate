@@ -472,6 +472,12 @@ local function completePetRescue(player)
 	clearCarryWeld()
 	player:SetAttribute("CarryingPet", false)
 	gate:SetAttribute("PetCarried", false)
+	local started = player:GetAttribute("MissionStartTime")
+	local missionElapsed = typeof(started) == "number"
+		and math.max(0, workspace:GetServerTimeNow() - started) or nil
+	if missionElapsed then
+		gate:SetAttribute("MissionElapsedSeconds", missionElapsed)
+	end
 	gate:SetAttribute("PetRescued", true)
 	gate:SetAttribute("PetMissionComplete", true)
 	gate:SetAttribute("MissionCompleted", true)
@@ -491,9 +497,12 @@ local function completePetRescue(player)
 	end
 	objectiveBillboard.Enabled = false
 	successAnchor.Position = safePosition + Vector3.new(0, 3.1, 0)
-	successBillboard.Message.Text = "КОТЁНОК СПАСЁН!"
+	local completionText = missionElapsed
+		and string.format("КОТЁНОК СПАСЁН! • %.1f С", missionElapsed)
+		or "КОТЁНОК СПАСЁН!"
+	successBillboard.Message.Text = completionText
 	successBillboard.Enabled = true
-	sendToPlayer(player, "КОТЁНОК СПАСЁН!", 7)
+	sendToPlayer(player, completionText, 7)
 	petOwnerUserId = nil
 end
 
